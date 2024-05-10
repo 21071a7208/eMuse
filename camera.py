@@ -1,14 +1,15 @@
 import numpy as np
+
 import cv2
 from PIL import Image
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, Flatten
-from tensorflow.keras.layers import Conv2D
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.layers import MaxPooling2D
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Conv2D
+from keras.optimizers import Adam
+from keras.layers import MaxPooling2D
+from keras.preprocessing.image import ImageDataGenerator
 from pandastable import Table, TableModel
-from tensorflow.keras.preprocessing import image
+from keras.preprocessing import image
 import datetime
 from threading import Thread
 # from Spotipy import *  
@@ -36,7 +37,7 @@ emotion_model.load_weights('model.h5')
 cv2.ocl.setUseOpenCL(False)
 
 emotion_dict = {0:"Angry",1:"Disgusted",2:"Fearful",3:"Happy",4:"Neutral",5:"Sad",6:"Surprised"}
-music_dist={0:"songs/angry.csv",1:"songs/disgusted.csv ",2:"songs/fearful.csv",3:"songs/happy.csv",4:"songs/neutral.csv",5:"songs/sad.csv",6:"songs/surprised.csv"}
+music_dist={0:"songs/angry_with_links.csv",1:"songs/disgusted_with_links.csv ",2:"songs/fearful_with_links.csv",3:"songs/happy_with_links.csv",4:"songs/neutral_with_links.csv",5:"songs/sad_with_links.csv",6:"songs/surprised_with_links.csv"}
 global last_frame1                                    
 last_frame1 = np.zeros((480, 640, 3), dtype=np.uint8)
 global cap1 
@@ -138,6 +139,13 @@ class VideoCamera(object):
 def music_rec():
 	# print('---------------- Value ------------', music_dist[show_text[0]])
 	df = pd.read_csv(music_dist[show_text[0]])
-	df = df[['Name','Album','Artist']]
+	df = df[['Name','Album','Artist' , 'Spotify Link']]
 	df = df.head(15)
 	return df
+def stop_emotion_detection():
+    global stop_emotion_detection_flag
+    stop_emotion_detection_flag = True
+    return jsonify({'message': 'Emotion detection stopped successfully.'})
+
+# Add a global flag to control emotion detection
+stop_emotion_detection_flag = False

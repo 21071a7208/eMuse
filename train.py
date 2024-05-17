@@ -5,7 +5,7 @@ from tensorflow.keras.layers import MaxPooling2D
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-train_dir = 'data/train'
+train_dir = 'merged_train'
 val_dir = 'data/test'
 train_datagen = ImageDataGenerator(rescale=1./255)
 val_datagen = ImageDataGenerator(rescale=1./255)
